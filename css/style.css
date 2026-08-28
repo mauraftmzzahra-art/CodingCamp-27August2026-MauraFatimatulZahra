@@ -1,1 +1,515 @@
-/* To-Do List Dashboard — styles go here */
+/* ==========================================================================
+   1. Custom Properties (Theme Tokens)
+   ========================================================================== */
+:root,
+[data-theme="light"] {
+  --color-bg: #fdf7c3;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fff1c4;
+  --color-text: #1c1917;
+  --color-text-muted: #78716c;
+  --color-primary: #f59e0b;
+  --color-primary-hover: #d97706;
+  --color-primary-contrast: #1c1917;
+  --color-border: #e7e5e4;
+  --color-error: #dc2626;
+  --color-error-bg: #fef2f2;
+  --color-done-opacity: 0.5;
+  --shadow-card: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.08);
+  --transition-theme: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+[data-theme="dark"] {
+  --color-bg: #1a052e;
+  --color-surface: #7056ad;
+  --color-surface-alt: #2a0c42;
+  --color-text: #f1f5f9;
+  --color-text-muted: #c5d9f5;
+  --color-primary: #f59e0b;
+  --color-primary-hover: #fbbf24;
+  --color-primary-contrast: #0f172a;
+  --color-border: #334155;
+  --color-error: #f87171;
+  --color-error-bg: #3f1d1d;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   2. Reset & Base
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  transition: var(--transition-theme);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   3. Header
+   ========================================================================== */
+#app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+#app-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+}
+
+#app-logo {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+}
+
+#theme-toggle {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+#theme-toggle:hover {
+  border-color: var(--color-primary);
+}
+
+@keyframes icon-flip {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(0.5); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+#theme-icon.animating {
+  display: inline-block;
+  animation: icon-flip 0.35s ease-in-out;
+}
+
+/* ==========================================================================
+   4. Alerts / Warnings
+   ========================================================================== */
+#storage-warning,
+#compat-warning,
+#load-error {
+  margin: 1rem 1.5rem 0;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   5. Layout
+   ========================================================================== */
+#dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  #dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+  #greeting-section {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  #dashboard {
+    grid-template-columns: 1.1fr 1fr 1fr;
+  }
+  #greeting-section {
+    grid-column: 1 / -1;
+  }
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.card-title-row .card-title {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   6. Greeting Section
+   ========================================================================== */
+#greeting-section {
+  background: linear-gradient(135deg, var(--color-surface-alt), var(--color-surface));
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+#greeting-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+#greeting-time-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+#greeting-time {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   7. Timer Section
+   ========================================================================== */
+#timer-display {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 0 1rem;
+  color: var(--color-primary);
+}
+
+#timer-set-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+#timer-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+#timer-action-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#timer-action-row .btn {
+  flex: 1;
+}
+
+#timer-notification,
+#timer-error {
+  text-align: center;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+/* ==========================================================================
+   8. Forms & Buttons
+   ========================================================================== */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+  flex: 1;
+}
+
+.field-group label {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.field-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+input[type="text"],
+input[type="time"],
+input[type="number"] {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.78rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   9. Todo Section
+   ========================================================================== */
+#todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-surface-alt);
+}
+
+.todo-item.done {
+  opacity: var(--color-done-opacity);
+}
+
+.todo-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-item-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+
+.todo-item.done .todo-item-name {
+  text-decoration: line-through;
+}
+
+.todo-item-time {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.todo-item-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  border-radius: 6px;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.icon-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.icon-btn.danger:hover {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+/* ==========================================================================
+   10. Quick Links Section
+   ========================================================================== */
+#quicklinks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.quicklink-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.4rem 0.4rem 0.4rem 0.85rem;
+  font-size: 0.85rem;
+}
+
+.quicklink-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-weight: 600;
+  padding: 0;
+}
+
+.quicklink-btn:hover {
+  color: var(--color-primary);
+}
+
+.quicklink-delete {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+.quicklink-delete:hover {
+  color: var(--color-error);
+}
+
+.empty-state {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+/* ==========================================================================
+   11. Responsive Breakpoints (fine-tuning)
+   ========================================================================== */
+@media (max-width: 400px) {
+  #app-header {
+    padding: 1rem;
+  }
+  #dashboard {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  #timer-display {
+    font-size: 2.4rem;
+  }
+}
+
+@media (min-width: 2000px) {
+  #dashboard {
+    max-width: 1400px;
+  }
+}

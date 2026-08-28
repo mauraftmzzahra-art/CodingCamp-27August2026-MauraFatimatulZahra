@@ -8,6 +8,112 @@
 </head>
 <body>
 
+  <header id="app-header">
+    <div id="app-title">
+      <span id="app-logo">◈</span>
+      <span>To-Do-List</span>
+      <span>Dashboard</span>
+      
+    </div>
+    <button id="theme-toggle" aria-label="Ganti tema terang/gelap">
+      <span id="theme-icon">☀️</span>
+    </button>
+  </header>
+
+  <div id="storage-warning" role="alert" aria-live="polite" hidden>
+    Penyimpanan data tidak tersedia. Data tidak akan disimpan secara permanen.
+  </div>
+
+  <div id="compat-warning" role="alert" hidden>
+    Browser Anda tidak mendukung fitur yang dibutuhkan oleh aplikasi ini. Silakan gunakan versi terbaru Chrome, Firefox, Edge, atau Safari.
+  </div>
+
+  <main id="dashboard">
+
+    <!-- Greeting Module -->
+    <section id="greeting-section" class="card" aria-label="Salam">
+      <div id="greeting-text">--</div>
+      <div id="greeting-time-row">
+        <span id="greeting-time">--:--</span>
+        <span id="greeting-date"></span>
+      </div>
+    </section>
+
+    <!-- Focus Timer -->
+    <section id="timer-section" class="card" aria-label="Focus Timer">
+      <h2 class="card-title">Focus Timer</h2>
+      <div id="timer-display">25:00</div>
+      <div id="timer-notification" role="alert" aria-live="assertive" hidden></div>
+      <div id="timer-error" role="alert" aria-live="polite" hidden></div>
+      <div id="timer-controls">
+        <div id="timer-set-row">
+          <input id="timer-input" type="number" min="1" max="999" value="25" aria-label="Durasi timer dalam menit" />
+          <button id="timer-set-btn" class="btn btn-ghost">Set</button>
+        </div>
+        <div id="timer-action-row">
+          <button id="timer-start-btn" class="btn btn-primary">Start</button>
+          <button id="timer-stop-btn" class="btn btn-ghost">Stop</button>
+          <button id="timer-reset-btn" class="btn btn-ghost">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- To-Do List -->
+    <section id="todo-section" class="card" aria-label="Daftar Tugas">
+      <div class="card-title-row">
+        <h2 class="card-title">Tugas Hari Ini</h2>
+        <button id="todo-sort-btn" class="btn btn-ghost btn-sm">Urutkan</button>
+      </div>
+      <form id="todo-form" novalidate>
+        <div class="field-group">
+          <input id="todo-name" type="text" maxlength="100" placeholder="Nama tugas" aria-label="Nama tugas" />
+          <span id="todo-name-error" class="field-error" hidden></span>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="todo-start">Mulai</label>
+            <input id="todo-start" type="time" />
+            <span id="todo-start-error" class="field-error" hidden></span>
+          </div>
+          <div class="field-group">
+            <label for="todo-end">Selesai</label>
+            <input id="todo-end" type="time" />
+            <span id="todo-end-error" class="field-error" hidden></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Tambah Tugas</button>
+      </form>
+      <ul id="todo-list" aria-label="Daftar tugas"></ul>
+      <p id="todo-empty" class="empty-state" hidden>Belum ada tugas. Tambahkan yang pertama di atas.</p>
+    </section>
+
+    <!-- Quick Links -->
+    <section id="quicklinks-section" class="card" aria-label="Tautan Cepat">
+      <h2 class="card-title">Tautan Cepat</h2>
+      <form id="link-form" novalidate>
+        <div class="field-row">
+          <div class="field-group">
+            <input id="link-label" type="text" maxlength="100" placeholder="Label" aria-label="Label tautan" />
+            <span id="link-label-error" class="field-error" hidden></span>
+          </div>
+          <div class="field-group">
+            <input id="link-url" type="text" maxlength="2048" placeholder="https://..." aria-label="URL tautan" />
+            <span id="link-url-error" class="field-error" hidden></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Tambah Tautan</button>
+      </form>
+      <div id="link-limit-error" class="field-error" role="alert" hidden></div>
+      <div id="quicklinks-list" role="list" aria-label="Daftar tautan cepat"></div>
+      <p id="quicklinks-empty" class="empty-state" hidden>Belum ada tautan tersimpan.</p>
+    </section>
+
+  </main>
+
+  <div id="load-error" role="alert" hidden>
+    Aplikasi gagal dimuat. Silakan muat ulang halaman.
+  </div>
+
   <script src="js/app.js"></script>
 </body>
 </html>
